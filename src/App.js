@@ -1,12 +1,20 @@
 import React, { useState } from 'react';
+import cars from './cars';
 import './App.css';
 
 function App() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
-  const [carCategory, setCarCategory] = useState('');
-  const [carModel, setCarModel] = useState('');
+  const [models, setModels] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [selectedModel, setSelectedModel] = useState('');
+
+  const changeCategory = e => {
+    const selectedCategory = e.target.value;
+    setSelectedCategory(selectedCategory);
+    setModels(selectedCategory ? cars.find(car => car.category === selectedCategory).models : []);
+  };
 
   return (
     <div className="app">
@@ -36,32 +44,22 @@ function App() {
           onChange={e => setPhone(e.target.value)}
         />
         <select
-          value={carCategory}
+          value={selectedCategory}
           className="form-control"
           required
-          onChange={e => setCarCategory(e.target.value)}
+          onChange={changeCategory}
         >
           <option value="">Car Category</option>
-          <option value="Small">Small</option>
-          <option value="Premium">Premium</option>
-          <option value="Van">Van</option>
+          {cars.map(car => <option key={car.id} value={car.category}>{car.category}</option>)}
         </select>
         <select
-          value={carModel}
+          value={selectedModel}
           className="form-control"
           required
-          onChange={e => setCarModel(e.target.value)}
+          onChange={e => setSelectedModel(e.target.value)}
         >
           <option value="">Car Model</option>
-          <option value="Opel Corsa">Opel Corsa</option>
-          <option value="Toyota Yaris">Toyota Yaris</option>
-          <option value="Smart for Two">Smart for Two</option>
-          <option value="Audi S8">Audi S8</option>
-          <option value="Jaguar XJR">Jaguar XJR</option>
-          <option value="BMW 750iL">BMW 750iL</option>
-          <option value="Volkswagen Touran">Volkswagen Touran</option>
-          <option value="Renault Espace">Renault Espace</option>
-          <option value="Fiat Talento">Fiat Talento</option>
+          {models.map(model => <option key={model} value={model}>{model}</option>)}
         </select>
         <button className="form-control">Submit</button>
       </form>
@@ -69,8 +67,8 @@ function App() {
         <p>Name: {name}</p>
         <p>E-mail: {email}</p>
         <p>Phone: {phone}</p>
-        <p>Car Category: {carCategory}</p>
-        <p>Car Model: {carModel}</p>
+        <p>Car Category: {selectedCategory}</p>
+        <p>Car Model: {selectedModel}</p>
       </div>
     </div>
   );
