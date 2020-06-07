@@ -18,52 +18,64 @@ function App() {
 
   return (
     <div className="app">
-      <h1>Formgen</h1>
-      <form>
-        <input
-          type="text"
-          value={name}
-          className="form-control"
-          placeholder="Name"
-          required
-          onChange={e => setName(e.target.value)}
-        />
-        <input
-          type="email"
-          value={email}
-          className="form-control"
-          placeholder="E-mail"
-          required
-          onChange={e => setEmail(e.target.value)}
-        />
-        <input
-          type="text"
-          value={phone}
-          className="form-control"
-          placeholder="Phone"
-          onChange={e => setPhone(e.target.value)}
-        />
-        <select
-          value={selectedCategory}
-          className="form-control"
-          required
-          onChange={changeCategory}
-        >
-          <option value="">Car Category</option>
-          {cars.map(car => <option key={car.id} value={car.category}>{car.category}</option>)}
-        </select>
-        <select
-          value={selectedModel}
-          className="form-control"
-          required
-          onChange={e => setSelectedModel(e.target.value)}
-        >
-          <option value="">Car Model</option>
-          {models.map(model => <option key={model} value={model}>{model}</option>)}
-        </select>
-        <button className="form-control">Submit</button>
+      <form className="form">
+        <fieldset>
+          <legend>Car Reservation</legend>
+          <div className="form-group">
+            <input
+              type="text"
+              value={name}
+              className="form-control"
+              placeholder="Name"
+              required
+              onChange={e => setName(e.target.value)}
+            />
+          </div>
+          <div className="form-group">
+            <input
+              type="email"
+              value={email}
+              className="form-control"
+              placeholder="E-mail"
+              required
+              onChange={e => setEmail(e.target.value)}
+            />
+          </div>
+          <div className="form-group">
+            <input
+              type="text"
+              value={phone}
+              className="form-control"
+              placeholder="Phone"
+              onChange={e => setPhone(e.target.value)}
+            />
+          </div>
+          <div className="form-group">
+            <select
+              value={selectedCategory}
+              className="form-control"
+              required
+              onChange={changeCategory}
+            >
+              <option value="">Car Category</option>
+              {cars.map(car => <option key={car.id} value={car.category}>{car.category}</option>)}
+            </select>
+          </div>
+          <div className="form-group">
+            <select
+              value={selectedModel}
+              className="form-control"
+              required
+              onChange={e => setSelectedModel(e.target.value)}
+            >
+              <option value="">Car Model</option>
+              {models.map(model => <option key={model} value={model}>{model}</option>)}
+            </select>
+          </div>
+          <button className="form-control">Submit</button>
+        </fieldset>
       </form>
-      <div>
+      <div className="form-values">
         <p>Name: {name}</p>
         <p>E-mail: {email}</p>
         <p>Phone: {phone}</p>

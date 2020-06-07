@@ -21,14 +21,39 @@ body {
     color: #282c34;
 }
 
+.form {
+  width: 90%;
+  max-width: 600px;
+}
+
+fieldset {
+  padding: calc(20px + 2vmin);
+}
+
 .form-control {
   display: block;
+  width: calc(100% - 20px);
   padding: 0.5em;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
   font-size: 16px;
 }
 
 select,
 button {
-  width: 100%;
+  width: 100% !important;
+}
+
+button.form-control {
+  margin-bottom: 0;
+}
+
+.form-values {
+  width: 90%;
+  max-width: 600px;
+  margin-top: 1.5em;
+}
+
+.form-values p {
+  margin: 0.5em 0;
+  font-size: 20px;
 }
