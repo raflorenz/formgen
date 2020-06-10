@@ -1,8 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import validate from './validate';
 import cars from './cars';
 
+const initialState = { name: '', email: '', phone: '', category: '', model: '' };
+
 function Form() {
-    const [values, setValues] = useState({ name: '', email: '', phone: '', category: '', model: '' });
+    const [values, setValues] = useState(initialState);
+    const [errors, setErrors] = useState({});
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [models, setModels] = useState([]);
 
     const handleChange = e => {
@@ -18,9 +23,22 @@ function Form() {
         }
     };
 
+    const handleSubmit = e => {
+        e.preventDefault();
+        setErrors(validate(values));
+        setIsSubmitting(true);
+    };
+
+    useEffect(() => {
+        if (Object.keys(errors).length === 0 && isSubmitting) {
+            console.log('Form submitted successfully');
+            setValues(initialState);
+        }
+    }, [errors, isSubmitting]);
+
     return (
         <>
-            <form className="form">
+            <form onSubmit={handleSubmit} className="form" noValidate>
                 <fieldset>
                     <legend>Car Reservation</legend>
                     <div className="form-group">
@@ -30,9 +48,10 @@ function Form() {
                             value={values.name}
                             className="form-control"
                             placeholder="Name"
-                            required
+                            autoFocus
                             onChange={handleChange}
                         />
+                        {errors.name && <p>{errors.name}</p>}
                     </div>
                     <div className="form-group">
                         <input
@@ -41,9 +60,9 @@ function Form() {
                             value={values.email}
                             className="form-control"
                             placeholder="E-mail"
-                            required
                             onChange={handleChange}
                         />
+                        {errors.email && <p>{errors.email}</p>}
                     </div>
                     <div className="form-group">
                         <input
@@ -60,7 +79,6 @@ function Form() {
                             name="category"
                             value={values.category}
                             className="form-control"
-                            required
                             onChange={handleChange}
                         >
                             <option value="">Car Category</option>
@@ -72,7 +90,6 @@ function Form() {
                             name="model"
                             value={values.model}
                             className="form-control"
-                            required
                             onChange={handleChange}
                         >
                             <option value="">Car Model</option>
