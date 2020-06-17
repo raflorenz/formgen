@@ -35,6 +35,8 @@ fieldset {
   width: calc(100% - 20px);
   padding: 0.5em;
   margin-bottom: 25px;
+  border-width: 2px;
+  border-style: solid;
   font-size: 16px;
 }
 
@@ -45,6 +47,25 @@ button {
 
 button.form-control {
   margin-bottom: 0;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+button.form-control:hover {
+  border-color: #282c34;
+  background-color: #282c34;
+  color: #fff;
+}
+
+.has-error .form-control {
+  border: 2px solid red;
+}
+
+.has-error p {
+  margin-top: -10px;
+  font-size: 16px;
+  line-height: 1;
+  color: red;
 }
 
 .form-values {

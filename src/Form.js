@@ -19,7 +19,21 @@ function Form() {
         });
 
         if (name === 'category') {
-            setModels(value ? cars.find(car => car.category === value).models : []);
+            if (value) {
+                setModels(cars.find(car => car.category === value).models);
+                setValues({
+                    ...values,
+                    category: value,
+                    model: ''
+                });
+            } else {
+                setModels([]);
+                setValues({
+                    ...values,
+                    category: '',
+                    model: ''
+                });
+            }
         }
     };
 
@@ -41,7 +55,7 @@ function Form() {
             <form onSubmit={handleSubmit} className="form" noValidate>
                 <fieldset>
                     <legend>Car Reservation</legend>
-                    <div className="form-group">
+                    <div className={`form-group ${errors.name ? 'has-error' : ''}`}>
                         <input
                             type="text"
                             name="name"
@@ -53,7 +67,7 @@ function Form() {
                         />
                         {errors.name && <p>{errors.name}</p>}
                     </div>
-                    <div className="form-group">
+                    <div className={`form-group ${errors.email ? 'has-error' : ''}`}>
                         <input
                             type="email"
                             name="email"
@@ -64,7 +78,7 @@ function Form() {
                         />
                         {errors.email && <p>{errors.email}</p>}
                     </div>
-                    <div className="form-group">
+                    <div className={`form-group ${errors.phone ? 'has-error' : ''}`}>
                         <input
                             type="text"
                             name="phone"
@@ -73,8 +87,9 @@ function Form() {
                             placeholder="Phone"
                             onChange={handleChange}
                         />
+                        {errors.phone && <p>{errors.phone}</p>}
                     </div>
-                    <div className="form-group">
+                    <div className={`form-group ${errors.category ? 'has-error' : ''}`}>
                         <select
                             name="category"
                             value={values.category}
@@ -84,8 +99,9 @@ function Form() {
                             <option value="">Car Category</option>
                             {cars.map(car => <option key={car.id} value={car.category}>{car.category}</option>)}
                         </select>
+                        {errors.category && <p>{errors.category}</p>}
                     </div>
-                    <div className="form-group">
+                    <div className={`form-group ${errors.model ? 'has-error' : ''}`}>
                         <select
                             name="model"
                             value={values.model}
@@ -95,6 +111,7 @@ function Form() {
                             <option value="">Car Model</option>
                             {models.map(model => <option key={model} value={model}>{model}</option>)}
                         </select>
+                        {errors.model && <p>{errors.model}</p>}
                     </div>
                     <button className="form-control">Submit</button>
                 </fieldset>
