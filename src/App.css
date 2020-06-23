@@ -57,15 +57,22 @@ button.form-control:hover {
   color: #fff;
 }
 
-.has-error .form-control {
-  border: 2px solid red;
-}
-
-.has-error p {
+.error {
+  display: none;
   margin-top: -10px;
   font-size: 16px;
   line-height: 1;
   color: red;
+}
+
+.form-group.active.invalid .error,
+.form.submitted .form-group.invalid .error {
+  display: block;
+}
+
+.form-group.active.invalid .form-control,
+.form.submitted .form-group.invalid .form-control {
+  border: 2px solid red;
 }
 
 .form-values {

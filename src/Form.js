@@ -7,6 +7,7 @@ const initialState = { name: '', email: '', phone: '', category: '', model: '' }
 function Form() {
     const [values, setValues] = useState(initialState);
     const [errors, setErrors] = useState({});
+    const [activeField, setActiveField] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [models, setModels] = useState([]);
 
@@ -37,10 +38,17 @@ function Form() {
         }
     };
 
+    const handleBlur = e => {
+        setErrors(validate(values));
+        setActiveField(e.target.name);
+        setIsSubmitting(false);
+    };
+
     const handleSubmit = e => {
         e.preventDefault();
         setErrors(validate(values));
         setIsSubmitting(true);
+        setActiveField('');
     };
 
     useEffect(() => {
@@ -52,33 +60,35 @@ function Form() {
 
     return (
         <>
-            <form onSubmit={handleSubmit} className="form" noValidate>
+            <form onSubmit={handleSubmit} className={`form ${isSubmitting ? 'submitted' : ''}`} noValidate>
                 <fieldset>
                     <legend>Car Reservation</legend>
-                    <div className={`form-group ${errors.name ? 'has-error' : ''}`}>
+                    <div className={`form-group ${activeField === 'name' ? 'active' : 'inactive'} ${errors.name ? 'invalid' : ''}`}>
                         <input
                             type="text"
                             name="name"
                             value={values.name}
                             className="form-control"
-                            placeholder="Name"
+                            placeholder="Name *"
                             autoFocus
                             onChange={handleChange}
+                            onBlur={handleBlur}
                         />
-                        {errors.name && <p>{errors.name}</p>}
+                        {errors.name && <p className="error">{errors.name}</p>}
                     </div>
-                    <div className={`form-group ${errors.email ? 'has-error' : ''}`}>
+                    <div className={`form-group ${activeField === 'email' ? 'active' : 'inactive'} ${errors.email ? 'invalid' : ''}`}>
                         <input
                             type="email"
                             name="email"
                             value={values.email}
                             className="form-control"
-                            placeholder="E-mail"
+                            placeholder="E-mail *"
                             onChange={handleChange}
+                            onBlur={handleBlur}
                         />
-                        {errors.email && <p>{errors.email}</p>}
+                        {errors.email && <p className="error">{errors.email}</p>}
                     </div>
-                    <div className={`form-group ${errors.phone ? 'has-error' : ''}`}>
+                    <div className={`form-group ${activeField === 'phone' ? 'active' : 'inactive'} ${errors.phone ? 'invalid' : ''}`}>
                         <input
                             type="text"
                             name="phone"
@@ -86,32 +96,35 @@ function Form() {
                             className="form-control"
                             placeholder="Phone"
                             onChange={handleChange}
+                            onBlur={handleBlur}
                         />
-                        {errors.phone && <p>{errors.phone}</p>}
+                        {errors.phone && <p className="error">{errors.phone}</p>}
                     </div>
-                    <div className={`form-group ${errors.category ? 'has-error' : ''}`}>
+                    <div className={`form-group ${activeField === 'category' ? 'active' : 'inactive'} ${errors.category ? 'invalid' : ''}`}>
                         <select
                             name="category"
                             value={values.category}
                             className="form-control"
                             onChange={handleChange}
+                            onBlur={handleBlur}
                         >
-                            <option value="">Car Category</option>
+                            <option value="">Car Category *</option>
                             {cars.map(car => <option key={car.id} value={car.category}>{car.category}</option>)}
                         </select>
-                        {errors.category && <p>{errors.category}</p>}
+                        {errors.category && <p className="error">{errors.category}</p>}
                     </div>
-                    <div className={`form-group ${errors.model ? 'has-error' : ''}`}>
+                    <div className={`form-group ${activeField === 'model' ? 'active' : 'inactive'} ${errors.model ? 'invalid' : ''}`}>
                         <select
                             name="model"
                             value={values.model}
                             className="form-control"
                             onChange={handleChange}
+                            onBlur={handleBlur}
                         >
-                            <option value="">Car Model</option>
+                            <option value="">Car Model *</option>
                             {models.map(model => <option key={model} value={model}>{model}</option>)}
                         </select>
-                        {errors.model && <p>{errors.model}</p>}
+                        {errors.model && <p className="error">{errors.model}</p>}
                     </div>
                     <button className="form-control">Submit</button>
                 </fieldset>
