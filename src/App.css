@@ -40,6 +40,22 @@ fieldset {
   font-size: 16px;
 }
 
+::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+  color: #000;
+}
+
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+ color: #000;
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+ color: #000;
+}
+
+::placeholder { /* Most modern browsers support this now */
+ color: #000;
+}
+
 select,
 button {
   width: 100% !important;
@@ -72,7 +88,16 @@ button.form-control:hover {
 
 .form-group.active.invalid .form-control,
 .form.submitted .form-group.invalid .form-control {
-  border: 2px solid red;
+  border-color: red;
+}
+
+.form-group.active .form-control,
+.form.submitted .form-control {
+  border-color: green;
+}
+
+.form.submitted button.form-control {
+  border-color: #282c34;
 }
 
 .form-values {

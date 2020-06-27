@@ -131,11 +131,11 @@ function Form() {
             </form>
 
             <div className="form-values">
-                <p>Name: {values.name}</p>
-                <p>E-mail: {values.email}</p>
-                <p>Phone: {values.phone}</p>
-                <p>Car Category: {values.category}</p>
-                <p>Car Model: {values.model}</p>
+                {values.name && <p>Name: {values.name}</p>}
+                {values.email && <p>E-mail: {values.email}</p>}
+                {values.phone && <p>Phone: {values.phone}</p>}
+                {values.category && <p>Car Category: {values.category}</p>}
+                {values.model && <p>Car Model: {values.model}</p>}
             </div>
         </>
     );
