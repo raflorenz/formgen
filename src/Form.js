@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import validate from './validate';
 import cars from './cars';
+import firebase from './firebase';
 
 const initialState = { name: '', email: '', phone: '', category: '', model: '' };
 
@@ -53,10 +54,17 @@ function Form() {
 
     useEffect(() => {
         if (Object.keys(errors).length === 0 && isSubmitting) {
-            console.log('Form submitted successfully');
-            setValues(initialState);
+            firebase
+                .firestore()
+                .collection('contacts')
+                .add(values)
+                .then(() => {
+                    alert('Form submitted successfully');
+                    setIsSubmitting(false);
+                    setValues(initialState);
+                });
         }
-    }, [errors, isSubmitting]);
+    }, [values, errors, isSubmitting]);
 
     return (
         <>
