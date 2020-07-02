@@ -30,6 +30,10 @@ fieldset {
   padding: calc(20px + 2vmin);
 }
 
+legend {
+  font-size: 25px;
+}
+
 .form-control {
   display: block;
   width: calc(100% - 20px);
@@ -56,14 +60,15 @@ fieldset {
  color: #000;
 }
 
-select,
-button {
+.form select,
+.form button {
   width: 100% !important;
 }
 
 button.form-control {
   margin-bottom: 0;
   background-color: transparent;
+  font-weight: bold;
   cursor: pointer;
 }
 
@@ -104,9 +109,26 @@ button.form-control:hover {
   width: 90%;
   max-width: 600px;
   margin-top: 1.5em;
+  font-size: 23px;
 }
 
-.form-values p {
-  margin: 0.5em 0;
-  font-size: 20px;
+.success {
+  font-size: 23px;
+  text-align: center;
+}
+
+.success button {
+  padding: 15px 30px;
+  margin-top: 1.5em;
+  border: 2px solid #282c34;
+  background-color: #282c34;
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff;
+  cursor: pointer;
+}
+
+.success button:hover {
+  background-color: transparent;
+  color: #282c34;
 }
