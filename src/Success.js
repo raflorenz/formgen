@@ -1,6 +1,7 @@
 import React from 'react';
+import Loader from './Loader';
 
-function Success({ values, addNewReservation }) {
+function Success({ values, addNewReservation, isLoading }) {
     return (
         <div className="success">
             <h2>Form submitted successfully</h2>
@@ -10,6 +11,7 @@ function Success({ values, addNewReservation }) {
             <p><strong>Car Category:</strong> <br/> {values.category}</p>
             <p><strong>Car Model:</strong> <br/> {values.model}</p>
             <button onClick={addNewReservation}>Add new reservation</button>
+            {isLoading && <Loader text="Loading form..." />}
         </div>
     );
 }

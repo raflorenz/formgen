@@ -22,6 +22,7 @@ body {
 }
 
 .form {
+  position: relative;
   width: 90%;
   max-width: 600px;
 }
@@ -113,6 +114,7 @@ button.form-control:hover {
 }
 
 .success {
+  position: relative;
   font-size: 23px;
   text-align: center;
 }
@@ -131,4 +133,32 @@ button.form-control:hover {
 .success button:hover {
   background-color: transparent;
   color: #282c34;
+}
+
+.loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.loader img {
+  width: 150px;
+  animation: loading infinite 1s linear;
+}
+
+.loader p {
+  margin: -20px 0 0;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+@keyframes loading {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Success from './Success';
+import Loader from './Loader';
 import cars from './cars';
 import validate from './validate';
 import firebase from './firebase';
@@ -13,6 +14,7 @@ function Form() {
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [models, setModels] = useState([]);
     const [isSuccessfullySubmitted, setIsSuccessfullySubmitted] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleChange = e => {
         const { name, value } = e.target;
@@ -58,19 +60,29 @@ function Form() {
     };
 
     const addNewReservation = () => {
-        setIsSuccessfullySubmitted(false);
-        setIsSubmitted(false);
-        setValues(initialState);
+        setIsLoading(true);
+
+        setTimeout(() => {
+            setIsSuccessfullySubmitted(false);
+            setIsSubmitted(false);
+            setValues(initialState);
+            setIsLoading(false);
+        }, 2000);
     };
 
     useEffect(() => {
         if (Object.keys(errors).length === 0 && isSubmitted) {
+            setIsLoading(true);
+
             firebase
                 .firestore()
                 .collection('contacts')
                 .add(values)
                 .then(() => {
-                    setIsSuccessfullySubmitted(true);
+                    setTimeout(() => {
+                        setIsSuccessfullySubmitted(true);
+                        setIsLoading(false);
+                    }, 2000);
                 });
         }
     }, [values, errors, isSubmitted]);
@@ -146,6 +158,7 @@ function Form() {
                         </div>
                         <button className="form-control">Submit</button>
                     </fieldset>
+                    {isLoading && <Loader text="Submitting form..." />}
                 </form>
 
                 <div className="form-values">
@@ -157,7 +170,7 @@ function Form() {
                 </div>
             </>
         ) : (
-            <Success values={values} addNewReservation={addNewReservation} />
+            <Success values={values} addNewReservation={addNewReservation} isLoading={isLoading} />
         )
     );
 }
