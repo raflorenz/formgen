@@ -139,19 +139,35 @@ button.form-control:hover {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
   text-align: center;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
 }
 
 .loader img {
   width: 150px;
+  -webkit-animation: loading infinite 1s linear;
   animation: loading infinite 1s linear;
 }
 
 .loader p {
-  margin: -20px 0 0;
+  margin: -15px 0 0;
   font-weight: bold;
   font-size: 20px;
+}
+
+.is-loading {
+  -webkit-filter: blur(3px);
+  filter: blur(3px);
+}
+
+@-webkit-keyframes loading {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes loading {

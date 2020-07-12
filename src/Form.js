@@ -1,77 +1,40 @@
-import React, { useState, useEffect } from 'react';
-import Success from './Success';
+import React, { useState, useCallback } from 'react';
+import useForm from './useForm';
 import Loader from './Loader';
+import Success from './Success';
 import cars from './cars';
 import validate from './validate';
 import firebase from './firebase';
 
-const initialState = { name: '', email: '', phone: '', category: '', model: '' };
+const initialFormValues = { name: '', email: '', phone: '', category: '', model: '' };
+let selectCategory, submitForm, backToForm;
 
 function Form() {
-    const [values, setValues] = useState(initialState);
-    const [errors, setErrors] = useState({});
-    const [activeField, setActiveField] = useState('');
-    const [isSubmitted, setIsSubmitted] = useState(false);
+    const { values, errors, activeField, isSubmitted, setValues, setIsSubmitted, handleChange, handleBlur, handleSubmit } = useForm(initialFormValues, submitForm, validate, selectCategory);
     const [models, setModels] = useState([]);
-    const [isSuccessfullySubmitted, setIsSuccessfullySubmitted] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [isSuccessfullySubmitted, setIsSuccessfullySubmitted] = useState(false);
 
-    const handleChange = e => {
-        const { name, value } = e.target;
-        
-        setValues({
-            ...values,
-            [name]: value
-        });
-
-        if (name === 'category') {
-            if (value) {
-                setModels(cars.find(car => car.category === value).models);
-                setValues({
-                    ...values,
-                    category: value,
-                    model: ''
-                });
-            } else {
-                setModels([]);
-                setValues({
-                    ...values,
-                    category: '',
-                    model: ''
-                });
-            }
+    selectCategory = categoryValue => {
+        if (categoryValue) {
+            setModels(cars.find(car => car.category === categoryValue).models);
+            setValues({
+                ...values,
+                category: categoryValue,
+                model: ''
+            });
+        } else {
+            setModels([]);
+            setValues({
+                ...values,
+                category: '',
+                model: ''
+            });
         }
-
-        setActiveField('');
-        setIsSubmitted(false);
     };
 
-    const handleBlur = e => {
-        setErrors(validate(values));
-        setActiveField(e.target.name);
-        setIsSubmitted(false);
-    };
-
-    const handleSubmit = e => {
-        e.preventDefault();
-        setErrors(validate(values));
-        setIsSubmitted(true);
-        setActiveField('');
-    };
-
-    const addNewReservation = () => {
-        setIsLoading(true);
-
-        setTimeout(() => {
-            setIsSuccessfullySubmitted(false);
-            setIsSubmitted(false);
-            setValues(initialState);
-            setIsLoading(false);
-        }, 2000);
-    };
-
-    useEffect(() => {
-        if (Object.keys(errors).length === 0 && isSubmitted) {
+    submitForm = useCallback(
+        () => {
             setIsLoading(true);
 
             firebase
@@ -80,20 +43,33 @@ function Form() {
                 .add(values)
                 .then(() => {
                     setTimeout(() => {
-                        setIsSuccessfullySubmitted(true);
                         setIsLoading(false);
+                        setIsSuccessfullySubmitted(true);
                     }, 2000);
                 });
-        }
-    }, [values, errors, isSubmitted]);
+        },
+        [values],
+    );
+
+    backToForm = () => {
+        setIsLoading(true);
+
+        setTimeout(() => {
+            setIsSuccessfullySubmitted(false);
+            setIsSubmitted(false);
+            setValues(initialFormValues);
+            setModels([]);
+            setIsLoading(false);
+        }, 2000);
+    };
 
     return (
         !isSuccessfullySubmitted ? (
             <>
-                <form onSubmit={handleSubmit} className={`form ${isSubmitted ? 'submitted' : ''}`} noValidate>
-                    <fieldset>
+                <form onSubmit={handleSubmit} className={`form${isSubmitted ? ' submitted' : ''}`} noValidate>
+                    <fieldset className={isLoading ? 'is-loading' : undefined}>
                         <legend>Car Reservation</legend>
-                        <div className={`form-group ${activeField === 'name' ? 'active' : 'inactive'} ${errors.name ? 'invalid' : ''}`}>
+                        <div className={`form-group${activeField === 'name' ? ' active' : ''}${errors.name ? ' invalid' : ''}`}>
                             <input
                                 type="text"
                                 name="name"
@@ -106,7 +82,7 @@ function Form() {
                             />
                             {errors.name && <p className="error">{errors.name}</p>}
                         </div>
-                        <div className={`form-group ${activeField === 'email' ? 'active' : 'inactive'} ${errors.email ? 'invalid' : ''}`}>
+                        <div className={`form-group${activeField === 'email' ? ' active' : ''}${errors.email ? ' invalid' : ''}`}>
                             <input
                                 type="email"
                                 name="email"
@@ -118,7 +94,7 @@ function Form() {
                             />
                             {errors.email && <p className="error">{errors.email}</p>}
                         </div>
-                        <div className={`form-group ${activeField === 'phone' ? 'active' : 'inactive'} ${errors.phone ? 'invalid' : ''}`}>
+                        <div className={`form-group${activeField === 'phone' ? ' active' : ''}${errors.phone ? ' invalid' : ''}`}>
                             <input
                                 type="text"
                                 name="phone"
@@ -130,7 +106,7 @@ function Form() {
                             />
                             {errors.phone && <p className="error">{errors.phone}</p>}
                         </div>
-                        <div className={`form-group ${activeField === 'category' ? 'active' : 'inactive'} ${errors.category ? 'invalid' : ''}`}>
+                        <div className={`form-group${activeField === 'category' ? ' active' : ''}${errors.category ? ' invalid' : ''}`}>
                             <select
                                 name="category"
                                 value={values.category}
@@ -143,7 +119,7 @@ function Form() {
                             </select>
                             {errors.category && <p className="error">{errors.category}</p>}
                         </div>
-                        <div className={`form-group ${activeField === 'model' ? 'active' : 'inactive'} ${errors.model ? 'invalid' : ''}`}>
+                        <div className={`form-group${activeField === 'model' ? ' active' : ''}${errors.model ? ' invalid' : ''}`}>
                             <select
                                 name="model"
                                 value={values.model}
@@ -161,7 +137,7 @@ function Form() {
                     {isLoading && <Loader text="Submitting form..." />}
                 </form>
 
-                <div className="form-values">
+                <div className={`form-values${isLoading ? ' is-loading' : ''}`}>
                     {values.name && <p><strong>Name:</strong> {values.name}</p>}
                     {values.email && <p><strong>E-mail:</strong> {values.email}</p>}
                     {values.phone && <p><strong>Phone:</strong> {values.phone}</p>}
@@ -170,7 +146,7 @@ function Form() {
                 </div>
             </>
         ) : (
-            <Success values={values} addNewReservation={addNewReservation} isLoading={isLoading} />
+            <Success values={values} backToForm={backToForm} isLoading={isLoading} />
         )
     );
 }
