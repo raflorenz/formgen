@@ -42,25 +42,18 @@ function Form() {
                 .collection('contacts')
                 .add(values)
                 .then(() => {
-                    setTimeout(() => {
-                        setIsLoading(false);
-                        setIsSuccessfullySubmitted(true);
-                    }, 2000);
+                    setIsLoading(false);
+                    setIsSuccessfullySubmitted(true);
                 });
         },
         [values],
     );
 
     backToForm = () => {
-        setIsLoading(true);
-
-        setTimeout(() => {
-            setIsSuccessfullySubmitted(false);
-            setIsSubmitted(false);
-            setValues(initialFormValues);
-            setModels([]);
-            setIsLoading(false);
-        }, 2000);
+        setIsSuccessfullySubmitted(false);
+        setIsSubmitted(false);
+        setValues(initialFormValues);
+        setModels([]);
     };
 
     return (
